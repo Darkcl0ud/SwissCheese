@@ -16,8 +16,8 @@ private:
 	symbol_table_t symbol_table;
 	expression_t expression;
 	parser_t parser;
-	std::string PrevExpres[20];
-	double PrevAns[20];
+	std::string PrevExpres[21];
+	double PrevAns[21];
 	int i = 0;
 
 	void PrintPrev();

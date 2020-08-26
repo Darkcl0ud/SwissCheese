@@ -47,14 +47,14 @@ void CalculatorClass::PrintPrev()
 {
 	std::cout << std::endl;
 
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < 20; i++)
 	{
 		std::cout << "=================================================" << std::endl;
 		std::cout << "x" << i << ":" << std::endl;
 		std::cout << PrevExpres[i];
 		std::cout << " = " << PrevAns[i] << std::endl;
 
-		if (i == 3)	/* On the last iteration */
+		if (i == 19)	/* On the last iteration */
 		{
 			std::cout << "=================================================" << std::endl << std::endl;
 		}
@@ -76,24 +76,23 @@ void CalculatorClass::ProcessExpress(std::string InString)
 		T result = expression.value();
 		std::cout << "= " << result << std::endl << std::endl;
 
-		// if TestArray holds x
-		if (i > 18) // this should be x-2
+		
+		if (i > 19) // Array - 2
 		{
-			for (size_t i = 0; i < 19; i++) // this should be < x-1
+			for (size_t i = 0; i < 20; i++) //  < Array - 1
 			{
 				PrevAns[i] = PrevAns[i + 1];
 				PrevExpres[i] = PrevExpres[i + 1];
 			}
-			PrevAns[18] = result; // this should be x-2
-			PrevExpres[18] = InString;	/* Push current expression to PastExpressions array, printed when user uses 'prev' */
 
-			symbol_table.add_variable("x" + std::to_string(3), PrevAns[18]); // this should be x -2
+			PrevAns[19] = result; // Array - 2
+			PrevExpres[19] = InString;	/* Push current expression to PastExpressions array, printed when user uses 'prev' */
+			symbol_table.add_variable("x" + std::to_string(19), PrevAns[19]); // Array - 2
 		}
 		else
 		{
 			PrevAns[i] = result;
 			PrevExpres[i] = InString;	/* Push current expression to PastExpressions array, printed when user uses 'prev' */
-
 			symbol_table.add_variable("x" + std::to_string(i), PrevAns[i]);
 		}
 		i++;
