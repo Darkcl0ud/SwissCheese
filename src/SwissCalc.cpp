@@ -1,9 +1,9 @@
 #include "SwissCalc.h"
 
-Logger CalcLog;
 
 int CalculatorClass::CalculatorMain(std::istream& stream)
 {
+	InitializeXNmap();
 	std::string StreamInputCalc;	/* Stream Input for CPPlayground main() */
 	std::cout << std::endl;
 	CalcLog.ConstChar("Input expression, 'help' for help.");
@@ -35,7 +35,7 @@ int CalculatorClass::CalculatorMain(std::istream& stream)
 			}
 			else	/* If we should process the string, then.... */
 			{
-				ProcessExpress(StreamInputCalc);
+				ProcessExpression(StreamInputCalc);
 			}
 		}
 	} while (stream);
@@ -43,25 +43,27 @@ int CalculatorClass::CalculatorMain(std::istream& stream)
 	return{};
 };
 
+
 void CalculatorClass::PrintPrev()
 {
 	std::cout << std::endl;
 
-	for (size_t i = 0; i < 20; i++)
+	for (size_t i = 22; i > 0 ; i--)
 	{
 		std::cout << "=================================================" << std::endl;
-		std::cout << "x" << i << ":" << std::endl;
-		std::cout << PrevExpres[i];
-		std::cout << " = " << PrevAns[i] << std::endl;
+		std::cout << "x" << i-1 << ":" << std::endl;
+		std::cout << PrevExpres[i-1];
+		std::cout << " = " << PrevAns[i-1] << std::endl;
 
-		if (i == 19)	/* On the last iteration */
+		if (i == 1)	/* On the last iteration */
 		{
 			std::cout << "=================================================" << std::endl << std::endl;
 		}
 	}
 }
 
-void CalculatorClass::ProcessExpress(std::string InString)
+
+void CalculatorClass::ProcessExpression(std::string InString)
 {
 	expression_string = InString;
 	expression.register_symbol_table(symbol_table);
@@ -76,25 +78,30 @@ void CalculatorClass::ProcessExpress(std::string InString)
 		T result = expression.value();
 		std::cout << "= " << result << std::endl << std::endl;
 
-		
-		if (i > 19) // Array - 2
+		for (size_t i = 21; i != 0; i--)
 		{
-			for (size_t i = 0; i < 20; i++) //  < Array - 1
+			if (i > 0)
 			{
-				PrevAns[i] = PrevAns[i + 1];
-				PrevExpres[i] = PrevExpres[i + 1];
-			}
+				PrevAns[i] = PrevAns[i - 1];
+				PrevAns[21] = 0;
 
-			PrevAns[19] = result; // Array - 2
-			PrevExpres[19] = InString;	/* Push current expression to PastExpressions array, printed when user uses 'prev' */
-			symbol_table.add_variable("x" + std::to_string(19), PrevAns[19]); // Array - 2
+				PrevExpres[i] = PrevExpres[i - 1];
+				PrevExpres[21] = " ";
+			}
 		}
-		else
-		{
-			PrevAns[i] = result;
-			PrevExpres[i] = InString;	/* Push current expression to PastExpressions array, printed when user uses 'prev' */
-			symbol_table.add_variable("x" + std::to_string(i), PrevAns[i]);
-		}
-		i++;
+			
+		PrevAns[0] = result;
+		PrevExpres[0] = InString;
+		i++;	
+	}
+}
+
+
+void CalculatorClass::InitializeXNmap()
+{
+	for (size_t gi = 0; gi < 22; gi++)
+	{
+		std::cout << "wee" << gi;
+		symbol_table.add_variable("x" + std::to_string(gi), PrevAns[gi]);
 	}
 }

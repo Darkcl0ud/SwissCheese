@@ -9,20 +9,23 @@ class CalculatorClass
 private:
 
 	typedef double T; /* Numeric type (float, double, mpfr etc.) */
-	typedef exprtk::symbol_table<T> symbol_table_t;
 	typedef exprtk::expression<T>     expression_t;
 	typedef exprtk::parser<T>             parser_t;
-	std::string expression_string;
+	typedef exprtk::symbol_table<T> symbol_table_t;
 	symbol_table_t symbol_table;
+	std::string expression_string;
 	expression_t expression;
 	parser_t parser;
-	std::string PrevExpres[21];
-	double PrevAns[21];
+	std::string PrevExpres[22];
+	T PrevAns[22];
 	int i = 0;
+	Logger CalcLog;
 
 	void PrintPrev();
-	void ProcessExpress(std::string InString);
+	void ProcessExpression(std::string InString);
+	void InitializeXNmap();
 
 public:
 	int CalculatorMain(std::istream& stream);
+
 };
