@@ -2,8 +2,4 @@
 
 #include <iostream>
 
-class Logger
-{
-public:
-	void ConstChar(const char* Message);
-};
+void Log(const char* Message);

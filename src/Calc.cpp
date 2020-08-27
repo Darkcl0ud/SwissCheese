@@ -4,7 +4,7 @@ int Calc::CalculatorMain(std::istream& stream)
 {
 	InitializeXNmap();
 	std::string StreamInputCalc;	/* Stream Input for CPPlayground main() */
-	CalcLog.ConstChar("\nInput expression, 'help' for help.");
+	Log("\nInput expression, 'help' for help.");
 
 	do
 	{
@@ -13,7 +13,7 @@ int Calc::CalculatorMain(std::istream& stream)
 		{
 			if (StreamInputCalc.empty())
 			{
-				CalcLog.ConstChar("ERROR - input is empty, 'help' for help.");
+				Log("ERROR - input is empty, 'help' for help.");
 			}
 			else if (StreamInputCalc == "exit")
 			{
@@ -25,9 +25,9 @@ int Calc::CalculatorMain(std::istream& stream)
 			}
 			else if (StreamInputCalc == "help")
 			{
-				CalcLog.ConstChar("\nThese commands are available:");
-				CalcLog.ConstChar("'exit' - Exits to Main Menu.");
-				CalcLog.ConstChar("'prev' - Shows previous expressions and their evaluations, mapped to xN variables.\n");
+				Log("\nThese commands are available:");
+				Log("'exit' - Exits to Main Menu.");
+				Log("'prev' - Shows previous expressions and their evaluations, mapped to xN variables.\n");
 			}
 			else	/* If we should process the string, then.... */
 			{
@@ -64,9 +64,9 @@ void Calc::ProcessExpression(std::string InString)
 
 	if (!parser.compile(expression_string, expression))	/* If we get an error during parsing */
 	{
-		CalcLog.ConstChar("ERROR - Check your expression, 'help' for help.\n");
+		Log("ERROR - Check your expression, 'help' for help.\n");
 	}
-	else
+	else	/* If we get no error during parsing */
 	{
 		T result = expression.value();
 		std::cout << "= " << result << "\n\n";
@@ -75,7 +75,7 @@ void Calc::ProcessExpression(std::string InString)
 		{
 			if (i > 0)
 			{
-				PreviousVals[i] = PreviousVals[i - 1]; //TESTING
+				PreviousVals[i] = PreviousVals[i - 1]; 
 			}
 		}
 

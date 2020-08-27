@@ -19,5 +19,4 @@ enum StringValue {	/* Enum mapped to string values with std::map */
 	evExit
 };
 
-static std::map<std::string, StringValue> s_mapStringValues;    /* Map to associate the strings with the 'StringValue' enum values */
-char szInput[_MAX_PATH]; /* stores user input, _MAX_PATH defines maximum size */
+std::map<std::string, StringValue> s_mapStringValues;    /* Map to associate the strings with the 'StringValue' enum values */
