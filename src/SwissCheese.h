@@ -2,11 +2,14 @@
 
 #include <map>
 #include <algorithm>
-#include "SwissCalc.h"
+#include "Calc.h"
 
-void InitializeStringMap();
-std::string GetInput(std::istream& stream, unsigned int MaxInputSize);
+
 void CallCalc();
+void PrintHelp();
+void InitializeStringMap();
+std::string GetCommand(std::istream& stream, unsigned int MaxInputSize);
+
 
 enum StringValue {	/* Enum mapped to string values with std::map */
 	evNotDefined,
