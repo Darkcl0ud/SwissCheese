@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <bitset>
+#include <sstream>
 
 enum ConversionModes {
 	Binary,
