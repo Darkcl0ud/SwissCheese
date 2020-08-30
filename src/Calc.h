@@ -3,6 +3,7 @@
 #include <sstream>
 #include "Log.h"
 #include "exprtk.hpp"
+#include "BaseConvert.h"
 
 class Calc
 {
@@ -23,10 +24,8 @@ private:
 	};
 	PreviousExpressionValues PreviousVals[22];
 
-	void PrintPrev();
-	void ProcessExpression(std::string InString);
-	void InitializeXNmap();
-
 public:
-	int CalculatorMain(std::istream& stream);
+	void ProcessExpression(std::string InString);
+	void PrintPrev();
+	void InitializeXNmap();
 };

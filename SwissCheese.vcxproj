@@ -151,11 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BaseConvert.cpp" />
     <ClCompile Include="src\Log.cpp" />
     <ClCompile Include="src\Calc.cpp" />
     <ClCompile Include="src\SwissCheese.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BaseConvert.h" />
     <ClInclude Include="src\exprtk.hpp" />
     <ClInclude Include="src\Log.h" />
     <ClInclude Include="src\Calc.h" />
