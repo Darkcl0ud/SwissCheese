@@ -7,27 +7,19 @@ void BaseConversion(ConversionParameters InParams)
 {
 	InParams.InString.erase(0, 2);
 
-	if (InParams.ModeA == 0 && InParams.ModeB == 1) /* Binary to Decimal */
+	if (InParams.ModeA == 0)  /* Binary Input */
+	{
+		std::cout << std::hex << (std::bitset<64> (InParams.InString)).to_ullong() << std::endl; //works
+		std::cout << std::dec << (std::bitset<64> (InParams.InString)).to_ullong() << std::endl; //works
+	}
+	else if (InParams.ModeA == 1)  /* Decimal Input */
+	{
+		std::string binary = std::bitset<64>(std::stoi(InParams.InString)).to_string();
+		std::cout << binary << std::endl;
+		std::cout << std::hex << (std::bitset<64> (binary)).to_ullong() << std::endl; //works
+	}
+	else if (InParams.ModeA == 2)	/* Hexadecimal Input */
 	{
 	}
-	else if (InParams.ModeA == 0 && InParams.ModeB == 2)  /* Binary to Hexadecimal */
-	{
-		std::cout << InParams.InString << " = ";
-		std::bitset<32> set(InParams.InString);
-		std::cout << std::hex << set.to_ullong() << std::endl;
-	}
-	else if (InParams.ModeA == 1 && InParams.ModeB == 0)  /* Decimal to Binary */
-	{
-		std::cout << InParams.InString << " = ";
-		std::cout << std::bitset<8>(InParams.InString).to_string();
-	}
-	else if (InParams.ModeA == 1 && InParams.ModeB == 2)    /* Decimal to Hexadecimal */
-	{
-	}
-	else if (InParams.ModeA == 2 && InParams.ModeB == 0)    /* Hexadecimal to Binary */
-	{
-	}
-	else if (InParams.ModeA == 2 && InParams.ModeB == 1)    /* Hexadecimal to Decimal */
-	{
-	}
+
 }
