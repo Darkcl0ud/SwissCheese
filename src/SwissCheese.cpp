@@ -3,10 +3,7 @@
 int main()
 {
 	InitializeStringMap();	/* Call initialization for mapping strings to enum */
-	Log("**** SwissCheese Multi Tool ****");
-	std::cout << "    ";
-	Log("**** v003  Darkloud ****\n");
-
+	ClearScreen();
 	Calc calc;
 	calc.InitializeXNmap();
 
@@ -90,7 +87,7 @@ std::string GetCommand(std::istream& stream, unsigned int MaxInputSize)
 		{
 			if (StreamInput.empty())
 			{
-				Log("ERROR - input is empty, try again.");
+				Log("ERROR - input is empty, try again. \n");
 			}
 
 			else {
@@ -109,6 +106,18 @@ std::string GetCommand(std::istream& stream, unsigned int MaxInputSize)
 void ClearScreen()
 {
 	std::cout << std::string(100, '\n');
+	std::cout << R"(
+
+ _____  _    _  _____  _____  _____  _____  _   _  _____  _____  _____  _____ 
+/  ___|| |  | ||_   _|/  ___|/  ___|/  __ \| | | ||  ___||  ___|/  ___||  ___|
+\ `--. | |  | |  | |  \ `--. \ `--. | /  \/| |_| || |__  | |__  \ `--. | |__  
+ `--. \| |/\| |  | |   `--. \ `--. \| |    |  _  ||  __| |  __|  `--. \|  __| 
+/\__/ /\  /\  / _| |_ /\__/ //\__/ /| \__/\| | | || |___ | |___ /\__/ /| |___ 
+\____/  \/  \/  \___/ \____/ \____/  \____/\_| |_/\____/ \____/ \____/ \____/ 
+							   @Darkloud ver.004                                                           
+                                                                              
+    
+)" << '\n';
 }
 
 void BaseConversion(ConversionParameters InParams)
@@ -116,30 +125,83 @@ void BaseConversion(ConversionParameters InParams)
 	if (InParams.ModeA == 0)  /* Binary Input */
 	{
 		InParams.InString.erase(0, 2);
+
 		std::cout << "Hex: " << std::hex << (std::bitset<64>(InParams.InString)).to_ullong() << "\n";	/* Print Hex */
-		std::cout << "Dec: " << std::dec << (std::bitset<64>(InParams.InString)).to_ullong() << "\n" << "\n";	/* Print Dec */
+		std::cout << "Dec: " << std::dec << (std::bitset<64>(InParams.InString)).to_ullong() << "\n\n";	/* Print Dec */
 	}
 	else if (InParams.ModeA == 1)  /* Decimal Input */
 	{
 		InParams.InString.erase(0, 3);
 		std::stringstream stream;
-		long long out;
+		unsigned long long out;
+
 		stream << std::dec << InParams.InString;
 		stream >> out;
-		std::cout << "Hex: " << std::hex << (std::bitset<64>(out)).to_ullong() << "\n" << "\n";	/* Print Hex */
 
+		std::cout << "Hex: " << std::hex << (std::bitset<64>(out)).to_ullong() << "\n";	/* Print Hex */
 
-		std::cout << std::bitset<64>(out).to_string() << "\n";
+		std::string str = std::bitset<64>(out).to_string();
+		std::cout << "Bin: ";
+
+		for (size_t i = 0; i < str.length(); i++)
+		{
+			std::cout << std::hex << str[i];
+			if (i == 7 || i == 15 || i == 23 || i == 31 || i == 39 || i == 47 || i == 55 || i == 63)
+			{
+				std::cout << "\n" << "     ";
+			}
+		}
+		std::cout << "\n";
 	}
 	else if (InParams.ModeA == 2)	/* Hexadecimal Input */
 	{
-		std::stringstream stream;
-		long long out;
+		if (InParams.InString.length() <= 18)
+		{
+			bool IsValid = false;
+			std::stringstream stream;
+			unsigned long long out;
 
-		stream << std::hex << InParams.InString;
-		stream >> out;
+			for (size_t i = 2; i < InParams.InString.length(); i++)	/* Checks if input is a valid Hex value */
+			{
+				if (InParams.InString[i] == '0' || InParams.InString[i] == '1' || InParams.InString[i] == '2' || 
+					InParams.InString[i] == '3' || InParams.InString[i] == '4' || InParams.InString[i] == '5' || 
+					InParams.InString[i] == '6' || InParams.InString[i] == '7' || InParams.InString[i] == '8' || 
+					InParams.InString[i] == '9' || InParams.InString[i] == 'a' || InParams.InString[i] == 'b' ||
+					InParams.InString[i] == 'c' || InParams.InString[i] == 'd' || InParams.InString[i] == 'e' ||
+					InParams.InString[i] == 'f')
+				{
+					IsValid = true;
+				}
+				else
+				{
+					IsValid = false;
+					Log("Not a valid Hex value, or greater than 64-bit. \n\n");
+					break;
+				}
+			}
 
-		std::cout << "Dec: " << out << "\n";	/* Print Dec */
-		std::cout << "Bin: " << std::bitset<64>(out).to_string() << "\n" << "\n"; /* Prints Binary */
+			if (IsValid)
+			{
+				stream << std::hex << InParams.InString;
+				stream >> out;
+				std::cout << std::dec << "Dec: " << out << "\n";	/* Print Dec */
+				std::string str = std::bitset<64>(out).to_string();
+
+				std::cout << "Bin: ";
+				for (size_t i = 0; i < str.length(); i++)
+				{
+					std::cout << std::hex << str[i];
+					if (i == 7 || i == 15 || i == 23 || i == 31 || i == 39 || i == 47 || i == 55 || i == 63)
+					{
+						std::cout << "\n" << "     ";
+					}
+				}
+				std::cout << "\n";
+			}
+		}
+		else
+		{
+			Log("Not a valid Hex value, or greater than 64-bit. \n");
+		}
 	}
 }
