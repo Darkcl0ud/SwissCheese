@@ -3,7 +3,6 @@
 #include <sstream>
 #include "Log.h"
 #include "exprtk.hpp"
-#include "BaseConvert.h"
 
 class Calc
 {

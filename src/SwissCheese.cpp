@@ -16,15 +16,15 @@ int main()
 
 		switch (s_mapStringValues[szInput])
 		{
-		case Help:
+		case evHelp:
 			PrintHelp();
 			break;
 
-		case Prev:
+		case evPrev:
 			calc.PrintPrev();
 			break;
 
-		case Clear:
+		case evClear:
 			ClearScreen();
 			break;
 
@@ -34,56 +34,21 @@ int main()
 
 		default:	/* If user did not input any of the above, process for base conversion, if no conversion modes are set, treat as an expression */
 
-			if (szInput.size() >= 2)
+			if (boost::starts_with(szInput, "0b"))
 			{
-				FirstModeSet = false;
-				SecondModeSet = false;
-
-				switch (szInput.at(0))	/* Check first character of input string for Mode 1 */
-				{
-				case 'b':
-					ConversionParams.ModeA = Binary;
-					FirstModeSet = true;
-					break;
-
-				case 'd':
-					ConversionParams.ModeA = Decimal;
-					FirstModeSet = true;
-					break;
-
-				case 'h':
-					ConversionParams.ModeA = Hexadecimal;
-					FirstModeSet = true;
-					break;
-
-				default:
-					break;
-				}
-
-				switch (szInput.at(1))	/* Check second character of input string for Mode 2 */
-				{
-				case 'b':
-					ConversionParams.ModeB = Binary;
-					SecondModeSet = true;
-					break;
-
-				case 'h':
-					ConversionParams.ModeB = Hexadecimal;
-					SecondModeSet = true;
-					break;
-
-				case 'd':
-					ConversionParams.ModeB = Decimal;
-					SecondModeSet = true;
-					break;
-
-				default:
-					break;
-				}
+				ConversionParams.ModeA = Binary;
+				ConversionParams.InString = szInput;
+				BaseConversion(ConversionParams);
 			}
-
-			if (FirstModeSet && SecondModeSet)
+			else if (boost::starts_with(szInput, "dec"))
 			{
+				ConversionParams.ModeA = Decimal;
+				ConversionParams.InString = szInput;
+				BaseConversion(ConversionParams);
+			}
+			else if (boost::starts_with(szInput, "0x"))
+			{
+				ConversionParams.ModeA = Hexadecimal;
 				ConversionParams.InString = szInput;
 				BaseConversion(ConversionParams);
 			}
@@ -91,8 +56,6 @@ int main()
 			{
 				calc.ProcessExpression(szInput);
 			}
-
-			break;
 		}
 	}
 }
@@ -109,10 +72,10 @@ void PrintHelp()
 
 void InitializeStringMap()      /* Maps string vlues to enum values */
 {
-	s_mapStringValues["calc"] = Calculator;
-	s_mapStringValues["prev"] = Prev;
-	s_mapStringValues["help"] = Help;
-	s_mapStringValues["clear"] = Clear;
+	s_mapStringValues["calc"] = evCalculator;
+	s_mapStringValues["prev"] = evPrev;
+	s_mapStringValues["help"] = evHelp;
+	s_mapStringValues["clear"] = evClear;
 	s_mapStringValues["exit"] = evExit;
 }
 
@@ -146,4 +109,37 @@ std::string GetCommand(std::istream& stream, unsigned int MaxInputSize)
 void ClearScreen()
 {
 	std::cout << std::string(100, '\n');
+}
+
+void BaseConversion(ConversionParameters InParams)
+{
+	if (InParams.ModeA == 0)  /* Binary Input */
+	{
+		InParams.InString.erase(0, 2);
+		std::cout << "Hex: " << std::hex << (std::bitset<64>(InParams.InString)).to_ullong() << "\n";	/* Print Hex */
+		std::cout << "Dec: " << std::dec << (std::bitset<64>(InParams.InString)).to_ullong() << "\n" << "\n";	/* Print Dec */
+	}
+	else if (InParams.ModeA == 1)  /* Decimal Input */
+	{
+		InParams.InString.erase(0, 3);
+		std::stringstream stream;
+		long long out;
+		stream << std::dec << InParams.InString;
+		stream >> out;
+		std::cout << "Hex: " << std::hex << (std::bitset<64>(out)).to_ullong() << "\n" << "\n";	/* Print Hex */
+
+
+		std::cout << std::bitset<64>(out).to_string() << "\n";
+	}
+	else if (InParams.ModeA == 2)	/* Hexadecimal Input */
+	{
+		std::stringstream stream;
+		long long out;
+
+		stream << std::hex << InParams.InString;
+		stream >> out;
+
+		std::cout << "Dec: " << out << "\n";	/* Print Dec */
+		std::cout << "Bin: " << std::bitset<64>(out).to_string() << "\n" << "\n"; /* Prints Binary */
+	}
 }
